@@ -1,9 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'mcr.microsoft.com/dotnet/sdk:8.0' // Usa esta imagen
-        }
-    }
+    agent any
     stages {
         stage('Restore dependencies') {
             steps {
