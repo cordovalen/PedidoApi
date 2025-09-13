@@ -1,23 +1,28 @@
 pipeline {
-    agent any
-
+    agent {
+        docker {
+            image 'mcr.microsoft.com/dotnet/sdk:8.0' // Usa esta imagen
+        }
+    }
     stages {
         stage('Restore dependencies') {
             steps {
-                echo 'Restaurando dependencias de NuGet...'
                 sh 'dotnet restore'
             }
         }
         stage('Build') {
             steps {
-                echo 'Compilando el proyecto...'
-                sh 'dotnet build --configuration Release'
+                sh 'dotnet build'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'dotnet test'
             }
         }
         stage('Publish') {
             steps {
-                echo 'Publicando el proyecto para despliegue...'
-                sh 'dotnet publish --configuration Release --output ./publish'
+                sh 'dotnet publish'
             }
         }
     }
