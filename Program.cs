@@ -1,4 +1,5 @@
-using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using PedidoApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +7,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+// Agrega esta línea
+string? connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql(connectionString));
+
+builder.Services.AddControllers();
+
 
 var app = builder.Build();
 
@@ -17,6 +25,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+
 
 string[] summaries =
 [
@@ -37,6 +47,10 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast")
 .WithOpenApi();
+
+app.UseRouting();
+app.UseAuthorization();
+app.MapControllers();
 
 app.Run();
 
