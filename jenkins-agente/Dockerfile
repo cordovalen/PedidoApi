@@ -1,18 +1,26 @@
-# Usa la imagen de agente base de Jenkins
-FROM jenkins/inbound-agent:4.11-1-jdk11
+FROM jenkins/jenkins:lts
+MAINTAINER blankhang@gmil.com
 
 USER root
-# Instala las dependencias necesarias para Docker
-RUN apt-get update && apt-get install -y apt-transport-https ca-certificates curl gnupg2
 
-# Agrega la llave GPG oficial de Docker
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+# install docker cli
+RUN apt-get -y update; apt-get install -y sudo; apt-get install -y git wget
+RUN echo "Jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
+RUN wget http://get.docker.com/builds/Linux/x86_64/docker-latest.tgz
+RUN tar -xvzf docker-latest.tgz
+RUN mv docker/* /usr/bin/
 
-# Configura el repositorio de Docker usando el nombre de la distribución
-RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian bullseye stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+# update system and install chinese language support and maven nodejs
+RUN apt-get update && apt-get install -y locales locales-all maven nodejs \
+    && sed -i '/^#.* zh_CN.UTF-8 /s/^#//' /etc/locale.gen \
+    && locale-gen \
+    && rm -rf /var/lib/apt/lists/* \
 
-# Instala el cliente de Docker
-RUN apt-get update && apt-get install -y docker-ce-cli
+# Setting Default Chinese Language and UTC+8 timezone
+#ENV LANG C.UTF-8
+ENV LANG zh_CN.UTF-8
+ENV LANGUAGE zh_CN.UTF-8
+ENV LC_ALL zh_CN.UTF-8
+ENV TZ Asia/Shanghai
 
-# Restaura el usuario a jenkins
-USER jenkins
+USER Jenkins
