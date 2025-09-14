@@ -16,6 +16,13 @@ pipeline {
                 sh 'dotnet test'
                 sh 'dotnet publish -c Release -o out'
             }
+        }        
+
+        stage('Diagnosticar Docker') {
+            steps {
+                sh 'which docker'
+                sh 'docker --version'
+            }
         }
 
         stage('Build Docker Image') {
@@ -36,13 +43,6 @@ pipeline {
                         sh "docker push ${DOCKER_IMAGE_NAME}:${imageTag}"
                     }
                 }
-            }
-        }
-
-        stage('Diagnosticar Docker') {
-            steps {
-                sh 'which docker'
-                sh 'docker --version'
             }
         }
 
