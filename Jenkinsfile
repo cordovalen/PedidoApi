@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'jenkins/jenkins:lts-jdk17'
+            image 'jenkins/inbound-agent:4.11-1-jdk11'
             args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     def imageTag = "${env.BUILD_NUMBER}"
-                    sh "docker build -t ${DOCKER_IMAGE_NAME}:${imageTag} -f .docker/Dockerfile ."
+                    sh "docker build -t ${DOCKER_IMAGE_NAME}:${imageTag} -f ./PedidoApi/.docker/Dockerfile ."
                 }
             }
         }
@@ -36,8 +36,8 @@ pipeline {
         stage('Update Helm Chart values.yaml') {
             steps {
                 script {
-                    def imageTag = "${env.BUILD_NUMBER}"         
-                    sh "sed -i '' 's|tag: .*|tag: ${imageTag}|' ../charts/pedido-app/values.yaml"
+                    def imageTag = "${env.BUILD_NUMBER}"
+                    sh "sed -i '' 's|tag: .*|tag: ${imageTag}|' charts/pedido-app/values.yaml"
                 }
             }
         }
@@ -47,7 +47,7 @@ pipeline {
                 script {
                     sh "git config user.email 'jenkins@your-company.com'"
                     sh "git config user.name 'Jenkins CI'"
-                    sh "git add ../charts/pedido-app/values.yaml"
+                    sh "git add charts/pedido-app/values.yaml"
                     sh "git commit -m '[CI] Update Helm chart image tag to ${env.BUILD_NUMBER}'"
                     sh "git push origin HEAD:main"
                 }
