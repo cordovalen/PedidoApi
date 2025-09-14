@@ -12,8 +12,8 @@ pipeline {
         stage('Restore and Build') {
             steps {
                 dir('PedidoApi') {
-                    sh 'dotnet restore'
-                    sh 'dotnet build'
+                    sh 'dotnet restore PedidoApi.sln' 
+                    sh 'dotnet build PedidoApi.sln' 
                     sh 'dotnet test'
                     sh 'dotnet publish -c Release -o out'
                 }
