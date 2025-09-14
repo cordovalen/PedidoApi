@@ -3,12 +3,20 @@ using PedidoApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+string? dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+string? dbPort = Environment.GetEnvironmentVariable("DB_PORT");
+string? dbUser = Environment.GetEnvironmentVariable("DB_USER");
+string? dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
+string? dbName = Environment.GetEnvironmentVariable("DB_NAME");
+
+string connectionString = $"Host={dbHost};Port={dbPort};Username={dbUser};Password={dbPassword};Database={dbName}";
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // Agrega esta línea
-string? connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
+//string? connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
