@@ -39,6 +39,13 @@ pipeline {
             }
         }
 
+        stage('Diagnosticar Docker') {
+            steps {
+                sh 'which docker'
+                sh 'docker --version'
+            }
+        }
+
         stage('Update Helm Chart values.yaml') {
             steps {
                 script {
