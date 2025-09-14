@@ -18,6 +18,13 @@ pipeline {
             }
         }
 
+        stage('Diagnosticar Docker') {
+            steps {
+                sh 'which docker'
+                sh 'docker --version'
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
