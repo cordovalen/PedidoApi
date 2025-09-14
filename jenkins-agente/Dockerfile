@@ -1,26 +1,17 @@
-FROM jenkins/jenkins:lts
-MAINTAINER blankhang@gmil.com
+FROM jenkins/agent:latest
 
 USER root
+# Instala las dependencias necesarias para Docker
+RUN apt-get update && apt-get install -y apt-transport-https ca-certificates curl gnupg2
 
-# install docker cli
-RUN apt-get -y update; apt-get install -y sudo; apt-get install -y git wget
-RUN echo "Jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
-RUN wget http://get.docker.com/builds/Linux/x86_64/docker-latest.tgz
-RUN tar -xvzf docker-latest.tgz
-RUN mv docker/* /usr/bin/
+# Agrega la llave GPG de Docker
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
-# update system and install chinese language support and maven nodejs
-RUN apt-get update && apt-get install -y locales locales-all maven nodejs \
-    && sed -i '/^#.* zh_CN.UTF-8 /s/^#//' /etc/locale.gen \
-    && locale-gen \
-    && rm -rf /var/lib/apt/lists/* \
+# Configura el repositorio de Docker usando "bookworm"
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian bookworm stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-# Setting Default Chinese Language and UTC+8 timezone
-#ENV LANG C.UTF-8
-ENV LANG zh_CN.UTF-8
-ENV LANGUAGE zh_CN.UTF-8
-ENV LC_ALL zh_CN.UTF-8
-ENV TZ Asia/Shanghai
+# Instala el cliente de Docker
+RUN apt-get update && apt-get install -y docker-ce-cli
 
-USER Jenkins
+# Restaura el usuario a jenkins
+USER jenkins
