@@ -37,3 +37,23 @@ jobs:
           file: .docker/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/pedidoapi:${{ github.run_number }}
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/pedidoapi:${{ github.run_number }}
+            docker stop pedidoapi-container || true
+            docker rm pedidoapi-container || true
+            docker run -d \
+              --name pedidoapi-container \
+              -p 8080:5000 \
+              -e "ConnectionStrings:DefaultConnection=${{ secrets.DB_CONNECTION_STRING }}" \
+              ${{ secrets.DOCKERHUB_USERNAME }}/pedidoapi:${{ github.run_number }}
