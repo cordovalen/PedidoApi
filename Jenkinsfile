@@ -11,12 +11,10 @@ pipeline {
     stages {
         stage('Restore and Build') {
             steps {
-                dir('PedidoApi') {
-                    sh 'dotnet restore PedidoApi.sln' 
-                    sh 'dotnet build PedidoApi.sln' 
-                    sh 'dotnet test'
-                    sh 'dotnet publish -c Release -o out'
-                }
+                sh 'dotnet restore PedidoApi.sln'
+                sh 'dotnet build PedidoApi.sln'
+                sh 'dotnet test'
+                sh 'dotnet publish -c Release -o out'
             }
         }
 
@@ -24,9 +22,7 @@ pipeline {
             steps {
                 script {
                     def imageTag = "${env.BUILD_NUMBER}"
-                    dir('PedidoApi') {
-                        sh "docker build -t ${DOCKER_IMAGE_NAME}:${imageTag} -f .docker/Dockerfile ."
-                    }
+                    sh "docker build -t ${DOCKER_IMAGE_NAME}:${imageTag} -f .docker/Dockerfile ."
                 }
             }
         }
