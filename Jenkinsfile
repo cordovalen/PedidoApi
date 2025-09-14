@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'mi-agente-jenkins:latest'
+            image 'jenkins/jenkins:lts-jdk17'
             args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
