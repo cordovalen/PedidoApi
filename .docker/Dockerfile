@@ -16,7 +16,7 @@ WORKDIR /app
 COPY --from=build /app/out .
 
 # Configura el puerto de escucha
-ENV ASPNETCORE_URLS=http://localhost:5000
+ENV ASPNETCORE_URLS=http://0.0.0.0:5000
 
 # Expón el puerto
 EXPOSE 5000
