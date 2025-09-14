@@ -32,13 +32,12 @@ spec:
           - path: {{ .path }}
             {{- with .pathType }}
             pathType: {{ . }}
-
             {{- end }}
             backend:
               service:
-                name: {{ include "backend.fullname" $ }}
+                name: {{ include "pedido-app.fullname" $ }}
                 port:
-                  number: {{ .service.port }}
+                  number: {{ $.Values.service.port }}
           {{- end }}
     {{- end }}
 {{- end }}
