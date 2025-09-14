@@ -7,28 +7,11 @@ pipeline {
     }
 
     environment {
-        // Nombre del repositorio de tu imagen de Docker Hub
         DOCKER_IMAGE_NAME = 'cordovale/pedidoapi'
-        // Credenciales de Docker Hub configuradas en Jenkins
         DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
     }
 
     stages {
-        stage('Restore and Build') {
-            steps {
-                sh 'dotnet restore PedidoApi.sln'
-                sh 'dotnet build PedidoApi.sln'
-                sh 'dotnet publish PedidoApi.csproj -c Release -o out'
-            }
-        }        
-
-        stage('Diagnosticar Docker') {
-            steps {
-                sh 'which docker'
-                sh 'docker --version'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 script {
@@ -53,8 +36,8 @@ pipeline {
         stage('Update Helm Chart values.yaml') {
             steps {
                 script {
-                    def imageTag = "${env.BUILD_NUMBER}"
-                    sh "sed -i '' 's|tag: .*|tag: ${imageTag}|' charts/pedido-app/values.yaml"
+                    def imageTag = "${env.BUILD_NUMBER}"         
+                    sh "sed -i '' 's|tag: .*|tag: ${imageTag}|' ../charts/pedido-app/values.yaml"
                 }
             }
         }
@@ -64,7 +47,7 @@ pipeline {
                 script {
                     sh "git config user.email 'jenkins@your-company.com'"
                     sh "git config user.name 'Jenkins CI'"
-                    sh "git add charts/pedido-app/values.yaml"
+                    sh "git add ../charts/pedido-app/values.yaml"
                     sh "git commit -m '[CI] Update Helm chart image tag to ${env.BUILD_NUMBER}'"
                     sh "git push origin HEAD:main"
                 }
