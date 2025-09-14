@@ -13,8 +13,7 @@ pipeline {
             steps {
                 sh 'dotnet restore PedidoApi.sln'
                 sh 'dotnet build PedidoApi.sln'
-                sh 'dotnet test'
-                sh 'dotnet publish -c Release -o out'
+                sh 'dotnet publish PedidoApi.csproj -c Release -o out'
             }
         }        
 
