@@ -16,10 +16,10 @@ WORKDIR /app
 COPY --from=build /app/out .
 
 # Configura el puerto de escucha
-ENV ASPNETCORE_URLS=http://+:8080
+ENV ASPNETCORE_URLS=http://localhost:5000
 
 # Expón el puerto
-EXPOSE 8080
+EXPOSE 5000
 
 # Define el punto de entrada para el contenedor
 ENTRYPOINT ["dotnet", "PedidoApi.dll"]
