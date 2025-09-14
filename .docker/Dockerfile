@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 # Copia los archivos del proyecto y restaura las dependencias
-COPY PedidoApi.csproj ./
+COPY PedidoApi/PedidoApi.csproj ./
 RUN dotnet restore
 
 # Copia todo el código fuente y publica la aplicación
