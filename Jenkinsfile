@@ -24,7 +24,9 @@ pipeline {
             steps {
                 script {
                     def imageTag = "${env.BUILD_NUMBER}"
-                    sh "docker build -t ${DOCKER_IMAGE_NAME}:${imageTag} -f PedidoApi/.docker/Dockerfile ."
+                    dir('PedidoApi') {
+                        sh "docker build -t ${DOCKER_IMAGE_NAME}:${imageTag} -f .docker/Dockerfile ."
+                    }
                 }
             }
         }
