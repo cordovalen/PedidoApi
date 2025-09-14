@@ -1,7 +1,8 @@
 name: CI/CD Pipeline for PedidoApi
 
 on:
-  push:
+  pull_request:
+    types: [opened, synchronize, reopened]
     branches: [ main, master ]
 
 jobs:
@@ -21,7 +22,7 @@ jobs:
           dotnet-version: '8.0.x'
       
       - name: Build with .NET
-        run: dotnet build PedidoApi/PedidoApi.sln --configuration Release
+        run: dotnet build PedidoApi.sln --configuration Release
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
