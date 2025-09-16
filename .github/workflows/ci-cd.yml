@@ -28,4 +28,4 @@ jobs:
         run: dotnet restore
       
       - name: Build with .NET
-        run: dotnet build no-restore
+        run: dotnet build PedidoApi.sln --no-restore
