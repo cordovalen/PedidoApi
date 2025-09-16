@@ -3,7 +3,10 @@ name: CI/CD Pipeline for PedidoApi
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-    branches: [ main, master ]
+    branches: [ master ]
+  push:
+    branches: [main]
+
 
 jobs:
   build:
@@ -20,40 +23,9 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
+    
+      - name: Restore dependencies
+        run: dotnet restore
       
       - name: Build with .NET
-        run: dotnet build PedidoApi.sln --configuration Release
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          file: .docker/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/pedidoapi:${{ github.run_number }}
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    
-    steps:
-      - name: Deploy to Server
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/pedidoapi:${{ github.run_number }}
-            docker stop pedidoapi-container || true
-            docker rm pedidoapi-container || true
-            docker run -d \
-              --name pedidoapi-container \
-              -p 8080:5000 \
-              -e "ConnectionStrings:DefaultConnection=${{ secrets.DB_CONNECTION_STRING }}" \
-              ${{ secrets.DOCKERHUB_USERNAME }}/pedidoapi:${{ github.run_number }}
+        run: dotnet build no-restore
