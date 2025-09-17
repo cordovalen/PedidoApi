@@ -28,4 +28,32 @@ jobs:
         run: dotnet restore
       
       - name: Build with .NET
-        run: dotnet build PedidoApi.sln --no-restore
+        run: dotnet build PedidoApi.sln --no-restore  
+  
+  docker_build_and_push:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Set image tag
+        id: vars
+        run: echo "IMAGE_TAG=${{ github.run_number }}" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/pedidoapp:${{ env.IMAGE_TAG }} .
+          docker tag ${{ secrets.DOCKER_USERNAME }}/pedidoapp:${{ env.IMAGE_TAG }} ${{ secrets.DOCKER_USERNAME }}/pedidoapp:latest
+
+      - name: Push Docker image
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/pedidoapp:${{ env.IMAGE_TAG }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/pedidoapp:latest
+
+
+
+

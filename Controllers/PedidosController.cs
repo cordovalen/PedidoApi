@@ -34,8 +34,9 @@ namespace PedidoApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Pedido>> PostPedido(Pedido pedido)
+        public async Task<ActionResult<Pedido>> CreatePedido(Pedido pedido)
         {
+            pedido.fecha = DateTime.Now.ToUniversalTime();
             _context.pedidos.Add(pedido);
             await _context.SaveChangesAsync();
 
