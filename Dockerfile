@@ -7,7 +7,7 @@ RUN dotnet publish -c Release -o ./out --self-contained true --runtime linux-arm
 
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS base
 WORKDIR /app
-COPY --from=build /app/out .
+COPY --from=build-env /app/out .
 EXPOSE 5000
 
 ENTRYPOINT ["dotnet", "PedidoApi.dll"]
