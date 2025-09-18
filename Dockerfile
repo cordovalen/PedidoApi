@@ -1,11 +1,11 @@
-FROM --platform=linux/arm64 mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /app
 
 COPY . ./
 RUN dotnet restore
-RUN dotnet publish -c Release -o ./out --self-contained true --runtime linux-arm64 --framework net8.0 /p:RuntimeFrameworkVersion=8.0.0
+RUN dotnet publish -c Release -o out
 
-FROM --platform=linux/arm64 mcr.microsoft.com/dotnet/sdk:8.0 AS base
+FROM mcr.microsoft.com/aspnet/sdk:8.0 AS runtime
 WORKDIR /app
 COPY --from=build-env /app/out .
 EXPOSE 5000
