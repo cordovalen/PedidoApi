@@ -1,0 +1,32 @@
+name: CI/CD Pipeline for PedidoApi
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [ master ]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+    
+      - name: Restore dependencies
+        run: dotnet restore
+      
+      - name: Build with .NET
+        run: dotnet build PedidoApi.sln --no-restore      
+
