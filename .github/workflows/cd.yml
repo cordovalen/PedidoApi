@@ -61,15 +61,22 @@ jobs:
         run: |
           git clone --single-branch --branch ${{ env.BRANCH }} ${{ env.EXTERNAL_REPO }} PedidoApi
           cd PedidoApi
+
       - name: yq - portable yaml processor
         uses: mikefarah/yq@v4.44.3
+
+      - name: Get tag
+        id: vars
+        run: echo "IMAGE_TAG=${{ github.run_number }}" >> $GITHUB_ENV
+
       - name: Set new image tag
         env:
           IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/pedidosapp
-          NEW_TAG: ${{ github.run_number }}" >> $GITHUB_ENV
+          NEW_TAG: ${{ env.IMAGE_TAG }}
         run: |
           cd PedidoApi
           yq eval ".image.tag = \"${{ env.NEW_TAG }}\"" -i helm/pedidoapi/values.yaml
+
       - name: Commit changes in external repo
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
