@@ -66,7 +66,7 @@ jobs:
       - name: Deploy to Kubernetes
         run: |
           echo "${{ secrets.KUBE_CONFIG }}" > /tmp/kubeconfig
-          kubectl config use-context default --kubeconfig=/tmp/kubeconfig
+          kubectl config use-context aks-cluster-pedidos --kubeconfig=/tmp/kubeconfig
           helm upgrade pedidoapi helm/pedidoapi \
             --install \
             --set image.repository=${{ secrets.DOCKER_USERNAME }}/pedidosapp \
