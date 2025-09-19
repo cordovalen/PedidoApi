@@ -58,20 +58,32 @@ jobs:
     runs-on: ubuntu-latest
     needs: docker_build_and_push
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up Helm
-        uses: azure/setup-helm@v4
-      - name: Deploy to Kubernetes
+      - name: Clone deployment repository
+        env:
+          EXTERNAL_REPO: 'https://github.com/cordovalen/PedidoApi'
+          BRANCH: 'master'
         run: |
-          printf "%s" "${{ secrets.KUBE_CONFIG }}" > $HOME/.kube/config
-          chmod 600 $HOME/.kube/config
-          kubectl config use-context aks-cluster-pedidos --kubeconfig=/tmp/kubeconfig
-          helm upgrade pedidoapi helm/pedidoapi \
-            --install \
-            --set image.repository=${{ secrets.DOCKER_USERNAME }}/pedidosapp \
-            --set image.tag=${{ env.IMAGE_TAG }} \
-            --namespace default
-
+          git clone --single-branch --branch ${{ env.BRANCH }} ${{ env.EXTERNAL_REPO }} PedidoApi
+          cd PedidoApi
+      - name: yq - portable yaml processor
+        uses: mikefarah/yq@v4.44.3
+      - name: Set new image tag
+        env:
+          IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/pedidosapp
+          NEW_TAG: ${{ env.IMAGE_TAG }}
+        run: |
+          cd PedidoApi
+          yq eval ".image.tag = \"${{ env.NEW_TAG }}\"" -i helm/pedidoapi/values.yaml
+      - name: Commit changes in external repo
+        env:
+          GITHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          cd PedidoApi
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Actualiza imagen a ${{ env.IMAGE_NAME }}:${{ env.NEW_TAG }}"
+          git remote set-url origin https://cordovalen:${{ env.GITHUB_TOKEN }}@github.com/cordovalen/PedidoApi.git
+          git push origin master
+    
 
