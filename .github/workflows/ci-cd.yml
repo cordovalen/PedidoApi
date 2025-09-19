@@ -65,7 +65,8 @@ jobs:
         uses: azure/setup-helm@v4
       - name: Deploy to Kubernetes
         run: |
-          echo "${{ secrets.KUBE_CONFIG }}" > /tmp/kubeconfig
+          printf "%s" "${{ secrets.KUBE_CONFIG }}" > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
           kubectl config use-context aks-cluster-pedidos --kubeconfig=/tmp/kubeconfig
           helm upgrade pedidoapi helm/pedidoapi \
             --install \
