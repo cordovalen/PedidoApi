@@ -7,17 +7,16 @@ namespace PedidoApi.Controllers
 {
     [ApiController]
     [Route("v1/[controller]")]
-    public class PedidosController(ApplicationDbContext context, Logger<PedidosController> logger) : ControllerBase
+    public class PedidosController(ApplicationDbContext context) : ControllerBase
     {
         private readonly ApplicationDbContext _context = context;
-        private readonly Logger<PedidosController> _logger = logger;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> GetPedidos()
         {
-            _logger.LogInformation("Obteniendo datos");
+            Console.WriteLine("Obteniendo pedidos de la BD");
             return Ok(await _context.pedidos.ToListAsync());
         }
 
