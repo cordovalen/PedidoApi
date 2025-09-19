@@ -50,7 +50,7 @@ app.MapGet("/GetWeatherForecast", () =>
 .WithName("GetWeatherForecast")
 .WithOpenApi();
 
-app.MapGet("/health", () => "OK");
+app.MapGet("/health", () => "ISABELA TE AMOOOO, YA VAMONOS A MEXICOOOO");
 
 app.UseRouting();
 app.UseAuthorization();
