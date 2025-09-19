@@ -76,7 +76,7 @@ jobs:
           yq eval ".image.tag = \"${{ env.NEW_TAG }}\"" -i helm/pedidoapi/values.yaml
       - name: Commit changes in external repo
         env:
-          GITHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
         run: |
           cd PedidoApi
           git config --local user.email "action@github.com"
