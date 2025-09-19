@@ -362,4 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-helm/pedidoapi/templates/values-secrets.yaml
+helm/pedidoapi/values-secrets.yaml
