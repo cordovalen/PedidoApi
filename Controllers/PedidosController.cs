@@ -16,6 +16,7 @@ namespace PedidoApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> GetPedidos()
         {
+            Console.WriteLine("Obteniendo datos de pedidos");
             return Ok(await _context.pedidos.ToListAsync());
         }
 
