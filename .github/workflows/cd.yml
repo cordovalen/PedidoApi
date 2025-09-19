@@ -22,7 +22,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -f PedidoApi/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/pedidosapp:${{ env.IMAGE_TAG }} PedidoApi/
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/pedidosapp:${{ env.IMAGE_TAG }} .
           docker tag ${{ secrets.DOCKER_USERNAME }}/pedidosapp:${{ env.IMAGE_TAG }} ${{ secrets.DOCKER_USERNAME }}/pedidosapp:latest
 
       - name: Push Docker image
