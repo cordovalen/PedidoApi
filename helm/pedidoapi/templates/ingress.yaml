@@ -3,6 +3,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "pedidoapi.fullname" . }}
+  namespace: default
   labels:
     {{- include "pedidoapi.labels" . | nindent 4 }}
   annotations:
