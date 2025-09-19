@@ -65,7 +65,7 @@ jobs:
         uses: azure/setup-helm@v4
       - name: Deploy to Kubernetes
         run: |
-          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > /tmp/kubeconfig
+          echo "${{ secrets.KUBE_CONFIG }}" > /tmp/kubeconfig
           kubectl config use-context default --kubeconfig=/tmp/kubeconfig
           helm upgrade pedidoapi helm/pedidoapi \
             --install \
