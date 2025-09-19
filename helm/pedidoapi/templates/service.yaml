@@ -5,9 +5,8 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   selector:  
-  {{- include "pedidoapi.selectorLabels" . | nindent 4 }}
+    app: pedidoapi
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: 5000
+      targetPort: 8080
       protocol: TCP
-      name: http

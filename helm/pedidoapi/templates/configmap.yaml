@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: pedidoapi-config
 data:
-  DB_URL: "postgresql.default.svc.cluster.local:5432"
+  DB_URL: "postgresbd-postgresql:5432"
