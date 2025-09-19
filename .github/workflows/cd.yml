@@ -80,6 +80,8 @@ jobs:
       - name: Commit changes in external repo
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+          IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/pedidosapp
+          NEW_TAG: ${{ env.IMAGE_TAG }}
         run: |
           cd PedidoApi
           git config --local user.email "action@github.com"
