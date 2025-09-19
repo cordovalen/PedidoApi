@@ -81,5 +81,3 @@ jobs:
           git commit -m "Actualiza imagen a ${{ env.IMAGE_NAME }}:${{ env.NEW_TAG }}"
           git remote set-url origin https://cordovalen:${{ env.GITHUB_TOKEN }}@github.com/cordovalen/PedidoApi.git
           git push origin master
-    
-
