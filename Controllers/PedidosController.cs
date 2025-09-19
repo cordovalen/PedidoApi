@@ -44,7 +44,7 @@ namespace PedidoApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPedido(int id, Pedido pedido)
+        public async Task<IActionResult> UpdatePedido(int id, Pedido pedido)
         {
             if (id != pedido.id)
             {
