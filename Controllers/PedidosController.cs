@@ -6,7 +6,7 @@ using PedidoApi.Models;
 namespace PedidoApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("v1/[controller]")]
     public class PedidosController(ApplicationDbContext context) : ControllerBase
     {
         private readonly ApplicationDbContext _context = context;
