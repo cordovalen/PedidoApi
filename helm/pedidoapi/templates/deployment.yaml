@@ -41,7 +41,13 @@ spec:
             httpGet:
               path: /health
               port: 8080
-            initialDelaySeconds: 9
+            initialDelaySeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 9
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: DB_URL
