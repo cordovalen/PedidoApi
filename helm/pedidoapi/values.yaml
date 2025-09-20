@@ -95,7 +95,3 @@ volumeMounts: []
 nodeSelector: {}
 tolerations: []
 affinity: {}
-
-secret:
-  dbUser: "postgres"
-  dbPass: "xcd7Cvliuq"
